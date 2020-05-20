@@ -22,4 +22,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     #添加index/路径配置,r表示字符串是非转义的原始字符，^用来匹配文本的开头，$用来匹配文本的结束
     path('index/',views.index),
+    url('login_action/$',views.login_action),
+    url(r'^event_manage/$',views.event_manage),
+    url(r'^$',views.index),
+    url(r'^accounts/login/$',views.index),
 ]
