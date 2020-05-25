@@ -22,6 +22,7 @@ class Guest(models.Model):
     sign = models.BooleanField() # 签到状态
     create_time = models.DateTimeField(auto_now=True) # 创建时间
 
+
 class Meta:
     unique_together = ("event","phone") # 将手机号和发布会id设置为联合主键
 
