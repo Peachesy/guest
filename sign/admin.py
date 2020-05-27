@@ -20,4 +20,3 @@ class GuestAdmin(admin.ModelAdmin):     # 没生效？？因为把admin.site.reg
 admin.site.register(Event,EventAdmin)
 admin.site.register(Guest,GuestAdmin)
 
-
