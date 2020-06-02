@@ -1,3 +1,18 @@
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Event Manage Page</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--    <h1>Login Success!</h1>-->
+<!--    <div style="float:right;">-->
+<!--        <a>嘿！{{ user }} 欢迎！</a><hr/>-->
+<!--    </div>-->
+<!--</body>-->
+<!--</html>-->
+
 <html lang="zh-CN">
 <head>
     {% load bootstrap3 %}
@@ -31,7 +46,11 @@
 
 <!-- 发布会搜索表单 -->
 <div class="page-header" style="padding-top:60px">
+
     <div id="navbar1" class="navbar-collapse collapse">
+
+    <div id="navbar" class="navbar-collapse collapse">
+
         <form class="navbar-form" method="get" action="/search_name/">
             <div class="form-group">
                 <input name="name" type="text" placeholder="名称" class="form-control">
@@ -47,7 +66,11 @@
         <table class="table table-striped">
         <thead>
         <tr>
+
             <th>id</th><th>名称</th><th>状态</th><th>地址</th><th>时间</th><th>签到</th>
+
+            <th>id</th><th>名称</th><th>状态</th><th>地址</th><th>时间</th>
+
         </tr>
         </thead>
         <tbody>
@@ -58,9 +81,12 @@
             <td>{{ event.status }}</td>
             <td>{{ event.address }}</td>
             <td>{{ event.start_time }}</td>
+
             <td>
                 <a href="/sign_index/{{ event.id }}/" target="{{ event.id }}_blank">sign</a>
             </td>
+
+
         </tr>
         {% endfor %}
         </tbody>
