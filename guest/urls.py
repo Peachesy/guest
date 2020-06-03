@@ -17,6 +17,7 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
 from sign import views # 导入sign应用的views文件
+from django.conf.urls import url, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,4 +32,5 @@ urlpatterns = [
     url(r'^sign_index/(?P<eid>[0-9]+)/$',views.sign_index),
     url(r'^sign_index_action/(?P<eid>[0-9]+)/$',views.sign_index_action),
     url(r'^logout/$',views.logout),
+    url(r'^api/', include(('sign.urls', 'sign'), namespace="sign")),  # 在全局url中用include方法进行配置，指向app url，即sign/urls.py文件
 ]

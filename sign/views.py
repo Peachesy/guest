@@ -50,7 +50,7 @@ def search_name(request):
 def guest_manage(request):
     username = request.session.get('user','')
     guest_list = Guest.objects.all()
-    paginator = Paginator(guest_list,5)
+    paginator = Paginator(guest_list, 5)
     page = request.GET.get('page')
     try:
         contacts = paginator.page(page)
