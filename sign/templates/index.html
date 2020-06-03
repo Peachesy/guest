@@ -7,7 +7,7 @@
 <body>
     <h1>发布会管理</h1>
     <h2>Hi,there!</h2>
-    <form method="post" action="/login_action/">
+    <form method="post" action="/login_action/"> {% csrf_token %}
         <input name="username" type="text" placeholder="username"><br>
         <input name="password" type="password" placeholder="password"><br>
         {{ error }}<br>

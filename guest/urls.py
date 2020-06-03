@@ -32,5 +32,6 @@ urlpatterns = [
     url(r'^sign_index/(?P<eid>[0-9]+)/$',views.sign_index),
     url(r'^sign_index_action/(?P<eid>[0-9]+)/$',views.sign_index_action),
     url(r'^logout/$',views.logout),
+    # 增加api路由，使接口可以访问，如：http://.../api/get_guest_list/
     url(r'^api/', include(('sign.urls', 'sign'), namespace="sign")),  # 在全局url中用include方法进行配置，指向app url，即sign/urls.py文件
 ]
