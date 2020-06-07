@@ -35,6 +35,7 @@ def event_manage(request):
     # username = request.COOKIES.get('user','') # 读取浏览器cookie
     event_list = Event.objects.all()
     username = request.session.get('user','') #读取浏览器session
+    print("get方法：",username)
     return render(request,'event_manage.html',{"user":username,"events":event_list})
 
 # 发布会名称搜索
@@ -83,7 +84,8 @@ def sign_index_action(request,eid):
         return render(request,'sign_index.html',{'event':event,'hint':'event id or phone error.'})
 
     result = Guest.objects.filter(phone=phone,event_id=eid)
-    if result.sign:
+    print("filter方法：",result)
+    if result[0].sign:
         return render(request,'sign_index.html',{'event':event,'hint':"user has signed in."})
     else:
         Guest.objects.filter(phone=phone,event_id=eid).update(sign='1')
