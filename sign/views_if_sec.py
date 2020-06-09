@@ -5,9 +5,37 @@ from django.db.utils import IntegrityError
 import time
 from django.contrib import auth as django_auth
 import base64
+import time, hashlib
+
+# 用户认证
+def user_auth(request):
+    get_http_auth = request.META.get('HTTP_AUTHORIZATION', b'')
+    auth = get_http_auth.split()
+    try:
+        auth_parts = base64.b64decode(auth[1]).decode('utf-8').partition(':')
+    except IndexError:
+        return "null"
+    username, password = auth_parts[0], auth_parts[2]
+    user = django_auth.authenticate(username=username, password=password)
+    if user is not None:
+        django_auth.login(request, user)
+        return "Success"
+    else:
+        return "Fail"
 
 # 添加发布会接口
 def add_event(request):
+    # 增加签名和时间戳
+    sign_result = user_sign()
+    if sign_result == "error":
+        return JsonResponse({'status':10011,'message':'request error'})
+    elif sign_result == "sign null":
+        return JsonResponse({'status':10012,'message':'user sign null'})
+    elif sign_result == "timeout":
+        return JsonResponse({'status':10013,'message':'user sign timeout'})
+    elif sign_result == "sign fail":
+        return JsonResponse({'status': 10014, 'message': 'user sign error'})
+
     eid = request.POST.get('eid','')
     name = request.POST.get('name','')
     limit = request.POST.get('limit','')
@@ -39,6 +67,11 @@ def add_event(request):
 
 # 查询发布会接口
 def get_event_list(request):
+    auth_result = user_auth(request) # 调用认证函数
+    if auth_result == "null":
+        return JsonResponse({'status':10011,'message':'user auth null'})
+    if auth_result == 'fail':
+        return JsonResponse({'status':10012,'message':'user auth fail'})
     eid = request.GET.get("eid","")
     name = request.GET.get("name","")
 
@@ -200,3 +233,33 @@ def user_sign(request):
     else:
         Guest.objects.filter(phone=phone).update(sign='1')
         return JsonResponse({'status':200,'message':'sign success'})
+
+def user_sign(request):
+    if request.method == 'POST':
+        client_time = request.POST.get('time','') # 客户端时间戳
+        client_sign = request.POST.get('sign','') # 客户端签名
+    else:
+        return "error"
+
+    if client_time == '' or client_sign == '':
+        return "sign null"
+
+    # 服务器时间
+    now_time = time.time()
+    server_time = str(now_time).split('.')[0]  # 将时间戳转化为字符串类型，并截取小数点前的时间
+    # 获取时间差
+    time_difference = int(server_time) - int(client_time)
+    if time_difference >= 60:
+        return "timeout"
+
+    # 签名检查
+    md5 = hashlib.md5()
+    sign_str = client_time + "&Guest-Bugmaster"
+    sign_bytes_utf8 = sign_str.encode(encoding="utf-8")
+    md5.update(sign_bytes_utf8)
+    server_sign = md5.hexdigest()
+
+    if server_sign != client_sign:
+        return "sign fail"
+    else:
+        return "sign success"
